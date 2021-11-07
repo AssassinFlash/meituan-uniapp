@@ -11184,6 +11184,52 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   sticky: 970,
   indexListSticky: 965 };exports.default = _default;
 
+/***/ }),
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */
+/*!******************************************************************!*\
+  !*** /Users/jzhflash/Downloads/meituan-uniapp-master/api/api.js ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.listing = void 0;var listing = function listing(urling) {
+  return new Promise(function (resolve, reject) {
+    uni.request({
+      url: urling,
+      method: 'GET',
+      success: function success(res) {
+        resolve(res.data);
+      },
+      fail: function fail(err) {
+        reject(err);
+      } });
+
+  });
+};exports.listing = listing;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+/* 48 */
+/*!**********************************************************************!*\
+  !*** /Users/jzhflash/Downloads/meituan-uniapp-master/api/request.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.getpreferurl = void 0; // 公用地址
+var baseUrl = 'https://meituan.thexxdd.cn/api';
+
+// 为你优选
+var getpreferurl = "".concat(baseUrl, "/forshop/getprefer");exports.getpreferurl = getpreferurl;
+
 /***/ })
 ]]);
 //# sourceMappingURL=../../.sourcemap/mp-weixin/common/vendor.js.map

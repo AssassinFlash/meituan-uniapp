@@ -1,9 +1,9 @@
 <template>
-	<view>外卖</view>
+  <view style="height: 2000rpx">内容区</view>
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
 <style lang="scss" scoped></style>
