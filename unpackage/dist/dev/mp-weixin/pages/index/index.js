@@ -159,7 +159,11 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+
 
 
 
@@ -178,7 +182,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 var _api = __webpack_require__(/*! ../../api/api.js */ 47);
-var _request = __webpack_require__(/*! ../../api/request.js */ 48);var Search = function Search() {__webpack_require__.e(/*! require.ensure | pages/index/components/search */ "pages/index/components/search").then((function () {return resolve(__webpack_require__(/*! ./components/search.vue */ 67));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Preference = function Preference() {__webpack_require__.e(/*! require.ensure | pages/index/components/preference */ "pages/index/components/preference").then((function () {return resolve(__webpack_require__(/*! ./components/preference.vue */ 74));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Nearby = function Nearby() {__webpack_require__.e(/*! require.ensure | pages/index/components/nearby */ "pages/index/components/nearby").then((function () {return resolve(__webpack_require__(/*! ./components/nearby.vue */ 81));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Delicacy = function Delicacy() {__webpack_require__.e(/*! require.ensure | pages/index/components/delicacy */ "pages/index/components/delicacy").then((function () {return resolve(__webpack_require__(/*! ./components/delicacy.vue */ 88));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Takeout = function Takeout() {__webpack_require__.e(/*! require.ensure | pages/index/components/takeout */ "pages/index/components/takeout").then((function () {return resolve(__webpack_require__(/*! ./components/takeout.vue */ 95));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+var _request = __webpack_require__(/*! ../../api/request.js */ 48);
+
+var _vuex = __webpack_require__(/*! vuex */ 128);function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var Search = function Search() {__webpack_require__.e(/*! require.ensure | pages/index/components/search */ "pages/index/components/search").then((function () {return resolve(__webpack_require__(/*! ./components/search.vue */ 67));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Preference = function Preference() {__webpack_require__.e(/*! require.ensure | pages/index/components/preference */ "pages/index/components/preference").then((function () {return resolve(__webpack_require__(/*! ./components/preference.vue */ 74));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Nearby = function Nearby() {__webpack_require__.e(/*! require.ensure | pages/index/components/nearby */ "pages/index/components/nearby").then((function () {return resolve(__webpack_require__(/*! ./components/nearby.vue */ 81));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Delicacy = function Delicacy() {__webpack_require__.e(/*! require.ensure | pages/index/components/delicacy */ "pages/index/components/delicacy").then((function () {return resolve(__webpack_require__(/*! ./components/delicacy.vue */ 88));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Takeout = function Takeout() {__webpack_require__.e(/*! require.ensure | pages/index/components/takeout */ "pages/index/components/takeout").then((function () {return resolve(__webpack_require__(/*! ./components/takeout.vue */ 95));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 {
   components: {
     Search: Search,
@@ -192,12 +198,13 @@ var _request = __webpack_require__(/*! ../../api/request.js */ 48);var Search = 
       menutop: "", // 筛选菜单和顶部的距离
       rect: "", // 页面滚动距离
       isfixed: false, // 筛选组件是否置顶
-      preferData: [] // 为你优选
+      preferData: [], // 为你优选
+      takeshop: [] // 商家列表
     };
   },
   onLoad: function onLoad() {var _this = this;
     this.preference();
-    // 获取筛选组件距离顶部的距离
+    // 获取筛选组件距离顶部的距离：wx.createSelectorQuery().select("..").boundingClientRect().exec(()=>{})
     var query = wx.createSelectorQuery();
     query.select("#boxFixed").boundingClientRect();
     query.exec(function (res) {
@@ -210,23 +217,48 @@ var _request = __webpack_require__(/*! ../../api/request.js */ 48);var Search = 
     this.rect = event.scrollTop;
   },
   methods: {
+    // 获取首页数据
     preference: function preference() {var _this2 = this;
-      (0, _api.listing)(_request.getpreferurl).then(function (res) {
-        _this2.preferData = res;
+      // 批量并发请求多个接口：Promise.all，同时得到多个接口的数据
+      Promise.all([(0, _api.listing)(_request.getpreferurl), (0, _api.listing)(_request.wxshopurl)]).
+      then(function (res) {
+        _this2.preferData = res[0];
+        _this2.takeshop = res[1];
+      }).
+      catch(function (err) {
+        console.log(err);
       });
+    },
+    // 点击筛选菜单滚动到顶部：uni.pageScrollTo({ scrollTop: 0 })
+    poll: function poll() {
+      uni.pageScrollTo({
+        scrollTop: this.menutop,
+        duration: 200 });
+
     } },
 
-  computed: {
+  computed: _objectSpread(_objectSpread({},
+  (0, _vuex.mapState)(["screendata"])), {}, {
+    count: function count() {
+      this.takeshop = this.screendata.screenarr;
+    }
     // 计算属性自动执行，时刻监听数据的变化
     // 监听筛选组件置顶和不置顶
-    namepage: function namepage() {
-      // 页面滚动高度大于筛选组件和顶部的距离，将筛选组件置顶
-      if (this.rect > this.menutop) {
-        this.isfixed = true;
-      } else {
-        this.isfixed = false;
-      }
+    // namepage() {
+    //   // 页面滚动高度大于筛选组件和顶部的距离，将筛选组件置顶
+    //   if (this.rect > this.menutop) {
+    //     this.isfixed = true;
+    //   } else {
+    //     this.isfixed = false;
+    //   }
+    // },
+  }),
+  // 使用监听属性也是可以的
+  watch: {
+    rect: function rect(newVal) {
+      newVal > this.menutop ? this.isfixed = true : this.isfixed = false;
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ })
 

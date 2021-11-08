@@ -114,142 +114,145 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default =
-{
-  data: function data() {
-    return {
-      // 排序菜单显示
-      drop: false,
-      // 筛选菜单显示
-      sortmen: false,
-      // 透明背景显示
-      ying: false,
-      // 综合排序
-      synthesize: "综合排序",
-      // 筛选项索引
-      num: 0,
-      // 排序数据
-      sortlist: [
-      {
-        name: "综合排序",
-        screen: "_id",
-        nums: 1 },
-
-      {
-        name: "起送价最低",
-        screen: "delivering",
-        nums: 1 },
-
-      {
-        name: "配送费最低",
-        screen: "physical",
-        nums: 1 },
-
-      {
-        name: "人均高到低",
-        screen: "capita",
-        nums: -1 },
-
-      {
-        name: "人均低到高",
-        screen: "capita",
-        nums: 1 }],
-
-
-      // 商家特色
-      screendata: [
-      {
-        title: "商家特色（可多选）",
-        datas: [
-        {
-          id: 1,
-          sign: "duration",
-          name: "配送最快" },
-
-        {
-          id: 1,
-          sign: "deliver",
-          name: "0元起送" },
-
-        {
-          id: 1,
-          sign: "physi",
-          name: "免配送费" }] }],
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
 
 
-      // 人均价格
-      person: [
-      {
-        title: "人均价格",
-        datas: [
-        {
-          name: "20元以下",
-          per: {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _request = __webpack_require__(/*! ../../../api/request.js */ 48);
+var _api = __webpack_require__(/*! ../../../api/api.js */ 47); //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// 引入post请求和请求地址
+var _default = { data: function data() {return { // 排序菜单显示
+      drop: false, // 筛选菜单显示
+      sortmen: false, // 透明背景显示
+      ying: false, // 综合排序
+      synthesize: "综合排序", // 筛选项索引
+      num: 0, // 排序数据
+      sortlist: [{ name: "综合排序", screen: "_id", nums: 1 }, { name: "起送价最低", screen: "delivering", nums: 1 }, { name: "配送费最低", screen: "physical", nums: 1 }, { name: "人均高到低", screen: "capita", nums: -1 }, { name: "人均低到高", screen: "capita", nums: 1 }], // 商家特色
+      screendata: [{ title: "商家特色（可多选）", datas: [{ id: 1, sign: "duration", name: "配送最快" }, { id: 1, sign: "deliver", name: "0元起送" }, { id: 1, sign: "physi", name: "免配送费" }] }], // 人均价格
+      person: [{ title: "人均价格", datas: [{ name: "20元以下", per: {
             $lt: 20 } },
 
 
@@ -289,21 +292,33 @@ var _default =
       this.backOne();
     },
     // 点击筛选项更改筛选标题
-    sortClick: function sortClick(name, index) {
+    sortClick: function sortClick(name, index, screen, nums) {
       this.synthesize = name;
       this.num = index;
       this.backClic();
+      this.starTing({ screen: screen, nums: nums });
+    },
+    // 综合排序的请求
+    starTing: function starTing(shopdata) {var _this = this;
+      (0, _api.publicing)(_request.startingurl, shopdata).
+      then(function (res) {
+        // 得到结果后传值给首页，让首页传给takeout组件，重新渲染页面
+        _this.$store.commit("screenmuta", res);
+      }).
+      catch(function (err) {
+        console.log(err);
+      });
     },
     // 透明背景显示
     backOne: function backOne() {
       this.ying = true;
     },
     // 透明背景隐藏
-    backClic: function backClic() {var _this = this;
+    backClic: function backClic() {var _this2 = this;
       this.ying = false;
       this.sortmen = false;
       setTimeout(function () {
-        _this.drop = false;
+        _this2.drop = false;
       }, 100);
     } } };exports.default = _default;
 

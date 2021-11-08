@@ -12,4 +12,20 @@ const listing = function (urling) {
     })
   })
 }
-export { listing }
+// post
+const publicing = function (urling, shopdata) {
+  return new Promise((resolve, reject) => {
+    uni.request({
+      url: urling,
+      data: shopdata,
+      method: 'post',
+      success: (res) => {
+        resolve(res.data)
+      },
+      fail: (error) => {
+        reject(error)
+      }
+    })
+  })
+}
+export { listing, publicing }

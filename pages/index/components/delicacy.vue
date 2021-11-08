@@ -19,7 +19,7 @@
       <text
         v-for="(item, index) in sortlist"
         :key="index"
-        @click="sortClick(item.name, index)"
+        @click="sortClick(item.name, index, item.screen, item.nums)"
         :class="{ activeb: num === index }"
         >{{ item.name }}</text
       >
@@ -62,6 +62,9 @@
 </template>
 
 <script>
+// 引入post请求和请求地址
+import { startingurl } from "../../../api/request.js";
+import { publicing } from "../../../api/api.js";
 export default {
   data() {
     return {
@@ -173,10 +176,22 @@ export default {
       this.backOne();
     },
     // 点击筛选项更改筛选标题
-    sortClick(name, index) {
+    sortClick(name, index, screen, nums) {
       this.synthesize = name;
       this.num = index;
       this.backClic();
+      this.starTing({ screen, nums });
+    },
+    // 综合排序的请求
+    starTing(shopdata) {
+      publicing(startingurl, shopdata)
+        .then((res) => {
+          // 得到结果后传值给首页，让首页传给takeout组件，重新渲染页面
+          this.$store.commit("screenmuta", res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     // 透明背景显示
     backOne() {
